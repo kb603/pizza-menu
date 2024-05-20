@@ -65,11 +65,29 @@ function Header() {
   );
 }
 function Menu() {
+  const pizzas = pizzaData;
+  //const pizzas = [];
+  const numPizzas = pizzas.length;
   return (
     <main className="menu">
       <h2>Our Menu</h2>
 
-      <div></div>
+      {numPizzas > 0 ? (
+        <>
+          <p>
+            Authentic Italian Cuisine. 6 creative dishes to choose from. All
+            from our stone oven, all organic, all delicious.
+          </p>
+
+          <ul className="pizzas">
+            {pizzaData.map((pizza) => (
+              <Pizza pizzaObject={pizza} key={pizza.name} />
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p>We're still working on our menu :)</p>
+      )}
 
       {/* <Pizza
         name="Pizza Spinnaci"
@@ -87,16 +105,17 @@ function Menu() {
   );
 }
 
-function Pizza(props) {
+function Pizza({ pizzaObject }) {
+  // if (pizzaObject.soldOut) return null;
   return (
-    <div className="pizza">
-      <img src={props.image} alt={props.name} />
+    <li className={`pizza ${pizzaObject.soldOut ? "sold-out" : ""}`}>
+      <img src={pizzaObject.photoName} alt={pizzaObject.name} />
       <div>
-        <h3>{props.name}</h3>
-        <p>{props.ingredients}</p>
-        <span>{props.price + 3}</span>
+        <h3>{pizzaObject.name}</h3>
+        <p>{pizzaObject.ingredients}</p>
+        <span> {pizzaObject.soldOut ? "SOLD OUT" : pizzaObject.price + 3}</span>
       </div>
-    </div>
+    </li>
   );
 }
 
@@ -107,6 +126,29 @@ function Footer() {
   const isOpen = hour >= openHour && hour <= closeHour;
   console.log(isOpen);
 
+  return (
+    <footer className="footer">
+      {isOpen ? (
+        <OrderBtn />
+      ) : (
+        <p>
+          We're happy to welcome you between {openHour}:00 and {closeHour}:00
+        </p>
+      )}
+    </footer>
+  );
+
+  function OrderBtn({ closeHour, openHour }) {
+    return (
+      <div className="order">
+        <p>
+          We're open from {openHour}:00 to {closeHour}:00. Come visit us or
+          order online
+        </p>
+        <button className="btn">Order</button>
+      </div>
+    );
+  }
   //   if (hour >= 12 && hour <= 22) {
   //     alert("We are currently open");
   //   } else {
